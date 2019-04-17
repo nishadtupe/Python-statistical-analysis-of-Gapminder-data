@@ -7,8 +7,7 @@
   - course: "Applied Data Science - INFO I590-9772"
   - semester: sp19
   - GitHub profile: https://github.com/nishadtupe
-  - portfolio: https://github.com/nishadtupe/dataanalytics/tree/master/Portfolio
-
+  - portfolio: https://github.com/nishadtupe/dataanalytics/tree/master/CodePortfolio
 # Final Project repository
 
 This repository is a collection of code and figures used in the final project.
