@@ -1,4 +1,5 @@
-#### The purpose of this repository is to provide information on the final project and weekly exercises for the Applied Data Science Course.
+
+### The purpose of this repository is to provide information on the final project and weekly exercises for the Applied Data Science Course.
 
 # Repository and Owner Information:
 
@@ -12,25 +13,11 @@
 
 This repository is a collection of code and figures used in the final project.
 
-## Data Description
+## Data 
+Dataset for the final Project 
 
-- Dataset name
-- Source
-- Number of rows and observation
-- Total
+## Code
+Code for the final project. 
 
-## Analysis
-TO DO
-
-
-Code Portfolio
-
-### This folder contains weekly exercises in Python and R language completed during the Applied Data Science Course (Spring 2019).
-
-# Repository and Owner Information:
-
-  - Name: "Nishad Tupe"
-  - course: "Applied Data Science - INFO I590-9772"
-  - semester: sp19
-  - GitHub profile: https://github.com/nishadtupe
-  - Code Portfolio - https://github.com/nishadtupe/dataanalytics/tree/master/CodePortfolio
+## CoePortfolio
+Weekly exercises completed during SPR-19 class
