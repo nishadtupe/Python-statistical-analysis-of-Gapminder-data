@@ -1,4 +1,4 @@
-# ### The purpose of this repository is to provide information on the final project and weekly exercises for the Applied Data Science Course.
+#### The purpose of this repository is to provide information on the final project and weekly exercises for the Applied Data Science Course.
 
 # Repository and Owner Information:
 
