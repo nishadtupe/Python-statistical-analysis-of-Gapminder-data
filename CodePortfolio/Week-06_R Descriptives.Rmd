@@ -1,0 +1,54 @@
+---
+title: "Week 6"
+author: "Nishad Tupe"
+date: "Feb 26, 2019"
+output: html_document
+reference: https://bookdown.org/rdpeng/exdata/exploratory-data-analysis-checklist.html
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Load the data
+```{r cars}
+ozone <- read.csv("USEPAdata 017.csv")
+```
+
+# check dimensions and structure
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+dim(ozone)
+str(ozone)
+```
+#brief overview 
+```{r}
+head(ozone[, c(6:7, 10)])
+tail(ozone[, c(6:7, 10)])
+```
+# Count
+```{r}
+table(ozone$Sample.Duration)
+library(dplyr)
+filter(ozone,Sample.Duration == "1 HOUR") %>%
+select(State.Code,County.Code,Sample.Duration,Pollutant.Standard)
+unique(ozone$State.Name)
+```
+# Calculate descriptives statistics such as Mean, Standard Deviation, IQR, Median etc
+```{r}
+avg <- mean(ozone$Valid.Day.Count)
+print(paste("Mean :",avg))
+std <-sd(ozone$Valid.Day.Count)
+print(paste("Standard Deviation :",std))
+range <- range(ozone$Valid.Day.Count)
+print(paste("Range :",range))
+IQR <- IQR(ozone$Valid.Day.Count)
+print(paste("IQR :",IQR))
+diff <-diff(range(ozone$Valid.Day.Count))
+print(paste("Diff :",diff))
+med <- median(ozone$Valid.Day.Count)
+print(paste("Median :",med))
+```
+

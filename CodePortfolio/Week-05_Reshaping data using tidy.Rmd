@@ -1,0 +1,158 @@
+---
+title: "Tidy data"
+author: "Nishad Tupe"
+date: "2/6/2019"
+output:
+  html_document:
+    df_print: paged
+Reference: https://r4ds.had.co.nz/tidy-data.html
+---
+
+# Loading all the necessary libraries.
+
+
+```{r}
+library(tidyverse)
+library(readr)
+library(tidyr)
+library(ggplot2)
+library(dplyr)
+```
+
+# Look at data in table1
+```{r}
+table1
+```
+
+# Compute rate per 10,000
+
+```{r}
+table1 %>% 
+  mutate(rate = cases / population * 10000)
+```
+# Compute the Cases per Year
+
+```{r}
+table1 %>% 
+count(year, wt = cases)
+
+```
+# Visualize changes over time
+
+```{r}
+library(ggplot2)
+ggplot(table1, aes(year, cases)) + 
+  geom_line(aes(group = country), colour = "grey50") + 
+  geom_point(aes(colour = country))
+```
+
+# Gathering
+```{r}
+table4a
+```
+
+# Using Gather
+To tidy a dataset like this, we need to gather those columns into a new pair of variables. To describe that operation we need three parameters: 
+The set of columns that represent values, not variables. In this example, those are the columns 1999 and 2000.
+The name of the variable whose values form the column names. I call that the key, and here it is year.
+The name of the variable whose values are spread over the cells. I call that value, and here it's the number of cases.
+Together those parameters generate the call to gather()
+
+```{r}
+table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+```
+# Using Left_join()
+
+To combine the tidied versions of table4a and table4b into a single tibble, we need to use dplyr::left_join()
+
+```{r}
+tidy4a <- table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+tidy4b <- table4b %>% 
+  gather(`1999`, `2000`, key = "year", value = "population")
+left_join(tidy4a, tidy4b)
+```
+
+# Spreading
+Spreading is the opposite of gathering. You use it when an observation is scattered across multiple rows. For example, take table2: an observation is a country in a year, but each observation is spread across two rows.
+
+```{r}
+table2
+```
+
+To tidy this up, we first analyse the representation in similar way to gather(). This time, however, we only need two parameters:
+The column that contains variable names, the key column. Here, it's type.
+The column that contains values from multiple variables, the value column. Here it's count.
+Once we've figured that out, we can use spread()
+
+```{r}
+table2 %>%
+    spread(key = type, value = count)
+```
+
+# Separating and uniting
+
+## separate
+separate() pulls apart one column into multiple columns, by splitting wherever a separator character appears. 
+```{r}
+table3 %>% 
+  separate(rate, into = c("cases", "population"))
+```
+## Unite
+
+```{r}
+table5 %>% 
+  unite(new, century, year)
+```
+
+# Missing values
+
+```{r}
+stocks <- tibble(
+  year   = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+  qtr    = c(   1,    2,    3,    4,    2,    3,    4),
+  return = c(1.88, 0.59, 0.35,   NA, 0.92, 0.17, 2.66)
+)
+```
+There are two missing values in this dataset:
+The return for the fourth quarter of 2015 is explicitly missing, because the cell where its value should be instead contains NA.
+The return for the first quarter of 2016 is implicitly missing, because it simply does not appear in the dataset.
+
+```{r}
+stocks %>% 
+  spread(year, return)
+```
+
+Because these explicit missing values may not be important in other representations of the data, you can set na.rm = TRUE in gather() to turn explicit missing values implicit:
+
+```{r}
+stocks %>% 
+  spread(year, return) %>% 
+  gather(year, return, `2015`:`2016`, na.rm = TRUE)
+```
+complete() takes a set of columns, and finds all unique combinations. It then ensures the original dataset contains all those values, filling in explicit NAs where necessary.
+
+```{r}
+stocks %>% 
+  complete(year, qtr)
+```
+
+There's one other important tool that you should know for working with missing values. Sometimes when a data source has primarily been used for data entry, missing values indicate that the previous value should be carried forward
+
+```{r}
+treatment <- tribble(
+  ~ person,           ~ treatment, ~response,
+  "Derrick Whitmore", 1,           7,
+  NA,                 2,           10,
+  NA,                 3,           9,
+  "Katherine Burke",  1,           4
+)
+```
+
+You can fill in these missing values with fill(). It takes a set of columns where you want missing values to be replaced by the most recent non-missing value (sometimes called last observation carried forward).
+
+```{r}
+treatment %>% 
+  fill(person)
+```

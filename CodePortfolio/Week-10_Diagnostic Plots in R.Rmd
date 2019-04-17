@@ -1,0 +1,50 @@
+---
+title: "Week-10- Diagnostic Plots"
+author: "Nishad Tupe"
+date: "March 20, 2019"
+output: html_document
+Reference: https://data.library.virginia.edu/diagnostic-plots/
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## understanding diagnostic plot for linear regression analysis.
+
+
+
+Along with residuals built in diagonostic plots for linear regression
+that helps us how well the model explains the relationship within predictor and # response variable
+
+```{r cars}
+data(women)
+```
+
+## Load the dataset
+
+```{r pressure, echo=FALSE}
+fit = lm(weight ~ height,women)
+```
+# Set Par - To look at four plots at once rather than one by one
+# Change the panel layout to 2 x 2
+```{r}
+par(mfrow=c(2,2)) 
+```
+```{r}
+plot(fit)
+```
+# Change the panel layout to 1 x 1
+```{r}
+par(mfrow=c(1,1)) 
+```
+
+# Residuals vs Fitted - This plot shows if residuals have non-linear patterns
+# Normal Q-Q - This plot shows if residuals are normally distributed. Do residuals follow a straight line well or do they deviate severely? It's good if residuals are lined well on the straight dashed line.
+# Scale-Location - It's also called Spread-Location plot. This plot shows if residuals are spread equally along the ranges of predictors.  
+# Residuals vs Leverage - This plot helps us to find influential cases (i.e., subjects) if any.
+
+
+
+
+

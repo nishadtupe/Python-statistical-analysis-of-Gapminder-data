@@ -1,0 +1,105 @@
+---
+title: "Data Analysis"
+author: "Nishad Tupe"
+date: "March 20, 2019"
+output: html_document
+reference: http://daviddalpiaz.github.io/appliedstats/model-diagnostics.html#data-analysis-examples
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# How to Perform good dianostics using regression models.
+
+
+
+## Building linear regression model and perform diagnostic.
+## Use mtcars data with mpg as response and hp and am as predictors
+
+```{r cars}
+mpg_hp_add = lm(mpg ~ hp + am, data = mtcars)
+plot(fitted(mpg_hp_add), resid(mpg_hp_add), col = "grey", pch = 20,
+     xlab = "Fitted", ylab = "Residual",
+     main = "mtcars: Fitted versus Residuals")
+abline(h = 0, col = "darkorange", lwd = 2)
+```
+
+## There are no patterns observed with constant variance.
+## The Q-Q plot looks extremely good 
+## The Shapiro-Wilk test agrees
+## You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+#bptest(mpg_hp_add)
+
+qqnorm(resid(mpg_hp_add), col = "darkgrey")
+qqline(resid(mpg_hp_add), col = "dodgerblue", lwd = 2)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+shapiro.test(resid(mpg_hp_add))
+```
+We see that there are two points of large leverage.
+There is also one point with a large residual
+
+```{r}
+sum(hatvalues(mpg_hp_add) > 2 * mean(hatvalues(mpg_hp_add)))
+sum(abs(rstandard(mpg_hp_add)) > 2)
+cd_mpg_hp_add = cooks.distance(mpg_hp_add)
+sum(cd_mpg_hp_add > 4 / length(cd_mpg_hp_add))
+large_cd_mpg = cd_mpg_hp_add > 4 / length(cd_mpg_hp_add)
+cd_mpg_hp_add[large_cd_mpg]
+```
+
+There are two infuential points interestingly they are very different cars
+There is not much change in co-efficients to worry about even after removing two influential points. so we can safely ignore them.
+```{r}
+coef(mpg_hp_add)
+```
+```{r}
+mpg_hp_add_fix = lm(mpg ~ hp + am,
+                    data = mtcars,
+                    subset = cd_mpg_hp_add <= 4 / length(cd_mpg_hp_add))
+coef(mpg_hp_add_fix)
+```
+Along with residuals built in diagonostic plots for linear regression
+that helps us how well the model explains the relationship within predictor and response variable
+```{r}
+par(mfrow = c(2, 2))
+plot(mpg_hp_add)
+```
+##  Suspect Diagnostics
+
+let use autompg dataset and built a linear model using multinomial regression
+Let's follow the same procedure with added features and validate with QQ plots.
+
+We can see 
+
+```{r}
+autompg <- read.csv("auto-mpg.csv")
+autompg <- na.omit(autompg)
+big_model <- lm(mpg ~ displacement * horsepower * origin, data = autompg)
+
+qqnorm(resid(big_model), col = "darkgrey")
+qqline(resid(big_model), col = "dodgerblue", lwd = 2)
+shapiro.test(resid(big_model))
+
+big_mod_cd = cooks.distance(big_model)
+sum(big_mod_cd > 4 / length(big_mod_cd))
+
+```
+Here, we find 31 points , so perhaps removing them will help!
+
+```{r}
+big_model_fix = lm(mpg ~ displacement * horsepower * origin,
+                   data = autompg,
+                   subset = big_mod_cd < 4 / length(big_mod_cd))
+qqnorm(resid(big_model_fix), col = "grey")
+qqline(resid(big_model_fix), col = "dodgerblue", lwd = 2)
+
+```
+
+
+
