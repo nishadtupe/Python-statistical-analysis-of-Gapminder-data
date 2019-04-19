@@ -5,7 +5,7 @@
 
   - Name: "Nishad Tupe"
   - course: "Applied Data Science - INFO I590-9772"
-  - semester: sp19
+  - semester: SPR19
   - GitHub profile: https://github.com/nishadtupe
   - portfolio: https://github.com/nishadtupe/dataanalytics/tree/master/CodePortfolio
 ### Final Project repository
