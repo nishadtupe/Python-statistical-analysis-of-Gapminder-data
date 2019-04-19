@@ -13,11 +13,8 @@
 This repository is a collection of code and data used in the final project,
 It also contains the CodePortfolio which contains code repository for weekly execises
 
-### Data 
-Dataset for the final Project 
-
-### Code
-Code for the final project. 
+### Final_Project
+Dataset, Code and Report (ipynb) for the final Project 
 
 ### CoePortfolio
 Weekly exercises completed during SPR-19 class
